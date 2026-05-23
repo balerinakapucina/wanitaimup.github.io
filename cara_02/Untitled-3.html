@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Brew - Grand Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #d4a373;
+            --dark: #0a0a0a;
+            --card: #161616;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--dark); color: var(--white); scroll-behavior: smooth; }
+
+        /* --- Music Floating --- */
+        .music-box {
+            position: fixed; top: 20px; left: 20px; z-index: 2000;
+            background: rgba(212, 163, 115, 0.2); backdrop-filter: blur(10px);
+            padding: 8px 15px; border-radius: 50px; border: 1px solid var(--gold);
+            cursor: pointer; display: flex; align-items: center; gap: 10px;
+        }
+
+        /* --- Header & Logo --- */
+        header {
+            height: 50vh; background: linear-gradient(rgba(0,0,0,0.8), var(--dark)), 
+            url('https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .logo-circle {
+            width: 90px; height: 90px; border: 2px solid var(--gold);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold);
+            box-shadow: 0 0 30px rgba(212, 163, 115, 0.4); margin-bottom: 10px;
+        }
+
+        /* --- Reservation Form --- */
+        .reservation-container {
+            max-width: 900px; margin: -60px auto 40px; background: var(--card);
+            padding: 30px; border-radius: 24px; border: 1px solid #333;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;
+        }
+
+        .input-group label { display: block; font-size: 0.8rem; color: var(--gold); margin-bottom: 5px; }
+        input, select {
+            width: 100%; padding: 12px; background: #222; border: 1px solid #444;
+            color: white; border-radius: 10px; outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--gold); }
+
+        /* --- Category Tabs --- */
+        .tabs {
+            display: flex; justify-content: center; gap: 10px; margin-bottom: 30px;
+            overflow-x: auto; padding: 10px;
+        }
+        .tab-btn {
+            padding: 10px 25px; border-radius: 30px; border: 1px solid var(--gold);
+            background: transparent; color: var(--gold); cursor: pointer; white-space: nowrap;
+        }
+        .tab-btn.active { background: var(--gold); color: var(--dark); font-weight: bold; }
+
+        /* --- Menu Grid --- */
+        .menu-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .menu-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; 
+        }
+
+        .item-card {
+            background: var(--card); border-radius: 18px; padding: 15px;
+            display: flex; align-items: center; gap: 15px; border: 1px solid #222;
+        }
+        .item-card img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
+        .item-info { flex: 1; }
+        .item-name { font-weight: 600; font-size: 0.95rem; }
+        .item-price { color: var(--gold); font-size: 0.85rem; }
+
+        .qty-ctrl {
+            display: flex; align-items: center; gap: 10px; background: #222;
+            padding: 5px 10px; border-radius: 8px; margin-top: 8px; width: fit-content;
+        }
+        .qty-btn { background: none; border: none; color: var(--gold); cursor: pointer; font-size: 1.1rem; }
+
+        /* --- Floating Order Button --- */
+        .order-summary {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px; background: #25d366; color: white;
+            padding: 18px; border-radius: 50px; text-align: center; font-weight: bold;
+            cursor: pointer; box-shadow: 0 10px 40px rgba(0,0,0,0.5); z-index: 1000;
+        }
+
+        footer { text-align: center; padding: 80px 20px 150px; opacity: 0.4; }
+    </style>
+</head>
+<body>
+
+    <div class="music-box" onclick="toggleMusic()">
+        <i id="m-icon" class="fas fa-play"></i>
+        <span>Play Vibes</span>
+        <audio id="bg-audio" loop src="https://www.bensound.com/bensound-music/bensound-jazzyfrenchy.mp3"></audio>
+    </div>
+
+    <header>
+        <div class="logo-circle">EB</div>
+        <h1 style="font-family: 'Playfair Display', serif; letter-spacing: 4px;">ELITE BREW</h1>
+        <p style="opacity: 0.7;">The Grand Menu Experience</p>
+    </header>
+
+    <div class="reservation-container">
+        <div class="input-group">
+            <label>Nama</label>
+            <input type="text" id="name" placeholder="Siapa nama anda?">
+        </div>
+        <div class="input-group">
+            <label>Waktu</label>
+            <input type="datetime-local" id="datetime">
+        </div>
+        <div class="input-group">
+            <label>Tamu</label>
+            <input type="number" id="guests" placeholder="Org">
+        </div>
+        <div class="input-group">
+            <label>Lantai</label>
+            <select id="floor">
+                <option>Lantai 1</option>
+                <option>Lantai 2 (Smoking)</option>
+                <option>Rooftop Garden</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>No. Meja</label>
+            <input type="text" id="table" placeholder="Contoh: A1">
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="filterMenu('food')">Makanan (56)</button>
+        <button class="tab-btn" onclick="filterMenu('drink')">Minuman (43)</button>
+        <button class="tab-btn" onclick="filterMenu('snack')">Snack (23)</button>
+        <button class="tab-btn" onclick="filterMenu('juice')">Jus (13)</button>
+    </div>
+
+    <div class="menu-container">
+        <div class="menu-grid" id="menu-display"></div>
+    </div>
+
+    <div class="order-summary" onclick="sendToWA()">
+        <i class="fab fa-whatsapp"></i> KIRIM PESANAN KE WHATSAPP
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Elite Brew Mega Cafe</p>
+    </footer>
+
+    <script>
+        // Data Otomatis (Contoh perwakilan, di lapangan bisa ditambah sampai 135 item)
+        const allItems = [];
+        
+        function generateData(category, count, prefix, price, img) {
+            for(let i=1; i<=count; i++) {
+                allItems.push({
+                    id: `${category}-${i}`,
+                    cat: category,
+                    name: `${prefix} ${i}`,
+                    price: price + (i * 1000),
+                    img: img
+                });
+            }
+        }
+
+        // Generate Menu Sesuai Permintaan (56 Makanan, 43 Minuman, 23 Snack, 13 Jus)
+        generateData('food', 56, 'Special Food', 45000, 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200');
+        generateData('drink', 43, 'Signature Coffee', 25000, 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200');
+        generateData('snack', 23, 'Tasty Snack', 20000, 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=200');
+        generateData('juice', 13, 'Fresh Juice', 22000, 'https://images.unsplash.com/photo-1600271886311-ad8d81471999?w=200');
+
+        let selectedQty = {};
+
+        function filterMenu(cat) {
+            // Update Active Tab
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const display = document.getElementById('menu-display');
+            display.innerHTML = "";
+            
+            const filtered = allItems.filter(item => item.cat === cat);
+            filtered.forEach(item => {
+                const qty = selectedQty[item.id] || 0;
+                display.innerHTML += `
+                    <div class="item-card">
+                        <img src="${item.img}">
+                        <div class="item-info">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
+                            <div class="qty-ctrl">
+                                <button class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
+                                <span id="q-${item.id}">${qty}</span>
+                                <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function changeQty(id, delta) {
+            selectedQty[id] = (selectedQty[id] || 0) + delta;
+            if(selectedQty[id] < 0) selectedQty[id] = 0;
+            document.getElementById(`q-${id}`).innerText = selectedQty[id];
+        }
+
+        function sendToWA() {
+            const name = document.getElementById('name').value;
+            const dt = document.getElementById('datetime').value;
+            const guests = document.getElementById('guests').value;
+            const floor = document.getElementById('floor').value;
+            const table = document.getElementById('table').value || "-";
+
+            if(!name || !dt || !guests) return alert("Mohon lengkapi detail reservasi!");
+
+            let list = "";
+            let total = 0;
+            
+            allItems.forEach(item => {
+                const q = selectedQty[item.id] || 0;
+                if(q > 0) {
+                    list += `- ${item.name} (${q}x)%0A`;
+                    total += (item.price * q);
+                }
+            });
+
+            if(list === "") return alert("Pilih menu dulu!");
+
+            const waNum = "628123456789"; // GANTI NOMOR WA DISINI
+            const text = `*RESERVASI MEGA CAFE*%0A%0A` +
+                         `*DATA TAMU*%0A` +
+                         `Nama: ${name}%0A` +
+                         `Waktu: ${dt}%0A` +
+                         `Jumlah: ${guests} Orang%0A` +
+                         `Lokasi: ${floor} (Meja ${table})%0A%0A` +
+                         `*ORDERAN*%0A${list}%0A` +
+                         `*ESTIMASI TOTAL:* Rp ${total.toLocaleString('id-ID')}`;
+
+            window.open(`https://wa.me/${waNum}?text=${text}`, '_blank');
+        }
+
+        function toggleMusic() {
+            const m = document.getElementById('bg-audio');
+            const icon = document.getElementById('m-icon');
+            if(m.paused) { m.play(); icon.className = "fas fa-pause"; }
+            else { m.pause(); icon.className = "fas fa-play"; }
+        }
+
+        // Jalankan awal
+        filterMenu('food');
+    </script>
+</body>
+</html>

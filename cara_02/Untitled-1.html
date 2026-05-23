@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ocean's Table - Seafood Cafe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-navy: #000080;
+            --accent-azure: #0099ff;
+            --bg-beige: #F5F5DC;
+            --accent-coral: #FF6B6B;
+        }
+
+        * {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .wave-divider {
+            position: relative;
+            height: 100px;
+            background: linear-gradient(to bottom, #F5F5DC, white);
+            overflow: hidden;
+        }
+
+        .wave-divider svg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-coral);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .menu-item-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 128, 0.15);
+        }
+
+        .btn-primary {
+            background: var(--accent-coral);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
+        }
+
+        .cart-counter {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-coral);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .price-badge {
+            background: var(--primary-navy);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            padding: 6px;
+            border: 2px solid var(--accent-azure);
+            border-radius: 6px;
+        }
+
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary-navy);
+            color: white;
+            padding: 16px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 40;
+            transition: all 0.3s ease;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .testimonial-slider {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scroll-behavior: smooth;
+        }
+
+        .testimonial-card {
+            flex-shrink: 0;
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--accent-coral);
+        }
+
+        .star-rating {
+            color: var(--accent-coral);
+            font-size: 14px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-navy);
+            margin-bottom: 12px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-coral);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+
+            .sticky-footer {
+                padding: 12px;
+            }
+        }
+
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(0, 0, 128, 0.7), rgba(0, 153, 255, 0.5));
+        }
+
+        .icon-large {
+            font-size: 3rem;
+            color: var(--accent-coral);
+            margin-bottom: 16px;
+        }
+
+        .transition-smooth {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-30 glassmorphism border-b border-blue-100">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-anchor text-blue-600 text-2xl"></i>
+                <h1 class="text-xl font-bold" style="color: var(--primary-navy);">The Ocean's Table</h1>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex gap-8 items-center">
+                <a href="#home" class="nav-link font-semibold" style="color: var(--primary-navy);">Home</a>
+                <a href="#menu" class="nav-link font-semibold" style="color: var(--primary-navy);">Menu</a>
+                <a href="#testimonials" class="nav-link font-semibold" style="color: var(--primary-navy);">Testimonials</a>
+                <a href="#contact" class="nav-link font-semibold" style="color: var(--primary-navy);">Contact</a>
+            </nav>
+
+            <!-- Cart Icon -->
+            <div class="relative cursor-pointer hover:scale-110 transition-transform" id="cartBtn">
+                <i class="fas fa-shopping-cart text-2xl" style="color: var(--primary-navy);"></i>
+                <div class="cart-counter" id="cartCounter">0</div>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden" id="mobileMenuBtn">
+                <i class="fas fa-bars text-2xl" style="color: var(--primary-navy);"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav id="mobileNav" class="hidden md:hidden bg-white border-t">
+            <a href="#home" class="block px-4 py-2 hover:bg-gray-100">Home</a>
+            <a href="#menu" class="block px-4 py-2 hover:bg-gray-100">Menu</a>
+            <a href="#testimonials" class="block px-4 py-2 hover:bg-gray-100">Testimonials</a>
+            <a href="#contact" class="block px-4 py-2 hover:bg-gray-100">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-overlay min-h-screen flex items-center justify-center text-center text-white px-4 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-30">
+            <i class="fas fa-water absolute top-10 left-10 text-6xl opacity-20"></i>
+            <i class="fas fa-compass absolute bottom-20 right-10 text-6xl opacity-20"></i>
+            <i class="fas fa-wave-square absolute top-1/2 right-20 text-5xl opacity-20"></i>
+        </div>
+
+        <div class="relative z-10 max-w-3xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                Rasakan Kesegaran Samudra di Setiap Suapan
+            </h1>
+            <p class="text-xl md:text-2xl mb-12 opacity-90">
+                Nikmati 56 pilihan hidangan laut autentik
+            </p>
+            <button id="menuScrollBtn" class="btn-primary px-8 py-3 text-white rounded-lg font-bold text-lg">
+                Pesan Sekarang
+            </button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gradient-to-b from-white to-blue-50">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title text-center mb-16">Mengapa Kami?</h2>
+            <div class="grid md:grid-cols-3 gap-8 mt-12">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-lg p-8 text-center shadow-lg hover:shadow-xl transition-shadow">
+                    <i class="fas fa-fish icon-large"></i>
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--primary-navy);">Bahan Segar</h3>
+                    <p class="text-gray-600">Semua bahan ditangkap langsung dari nelayan lokal setiap pagi untuk kesegaran maksimal.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white rounded-lg p-8 text-center shadow-lg hover:shadow-xl transition-shadow">
+                    <i class="fas fa-water icon-large"></i>
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--primary-navy);">Vibe Laut</h3>
+                    <p class="text-gray-600">Nikmati suasana maritim autentik dengan dekorasi pantai dan pemandangan laut yang memukau.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white rounded-lg p-8 text-center shadow-lg hover:shadow-xl transition-shadow">
+                    <i class="fas fa-mobile-alt icon-large"></i>
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--primary-navy);">Pemesanan Digital</h3>
+                    <p class="text-gray-600">Pesan dengan mudah melalui aplikasi kami dan dapatkan diskon khusus setiap hari.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title mb-6">Menu Pilihan</h2>
+            <p class="text-gray-600 mb-12">Pilih hidangan favorit Anda dan tambahkan ke keranjang</p>
+
+            <!-- Category Filter -->
+            <div class="flex flex-wrap gap-4 mb-12 justify-center">
+                <button class="category-btn px-6 py-2 rounded-full font-semibold border-2 transition-all active" data-category="all">
+                    Semua Menu
+                </button>
+                <button class="category-btn px-6 py-2 rounded-full font-semibold border-2 transition-all" data-category="seafood">
+                    Hidangan Utama
+                </button>
+                <button class="category-btn px-6 py-2 rounded-full font-semibold border-2 transition-all" data-category="drinks">
+                    Minuman Tropis
+                </button>
+                <button class="category-btn px-6 py-2 rounded-full font-semibold border-2 transition-all" data-category="dessert">
+                    Dessert Laut
+                </button>
+            </div>
+
+            <!-- Menu Grid -->
+            <div id="menuGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Menu items will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-16 bg-gradient-to-b from-blue-50 to-white">
+        <div class="container mx-auto px-4">
+            <h2 class="section-title mb-6">Testimoni Pelanggan</h2>
+            <p class="text-gray-600 mb-12">Dengarkan apa kata pelanggan setia kami</p>
+
+            <div class="testimonial-slider" id="testimonialSlider">
+                <!-- Testimonials will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact/Footer Section -->
+    <section id="contact" class="py-16" style="background-color: var(--primary-navy);">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-12 text-white">
+                <!-- Address -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-map-marker-alt"></i> Lokasi
+                    </h3>
+                    <p class="text-gray-300">Jl. Pesisir Biru No. 56, Kawasan Pantai Indah</p>
+                </div>
+
+                <!-- Hours -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-clock"></i> Jam Operasional
+                    </h3>
+                    <p class="text-gray-300">Setiap Hari: 10:00 - 22:00</p>
+                    <p class="text-gray-300 text-sm mt-2">Libur: Hari Raya Idul Fitri</p>
+                </div>
+
+                <!-- Social Media -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-share-alt"></i> Ikuti Kami
+                    </h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="hover:text-blue-400 transition-colors">
+                            <i class="fab fa-facebook text-2xl"></i>
+                        </a>
+                        <a href="#" class="hover:text-blue-400 transition-colors">
+                            <i class="fab fa-instagram text-2xl"></i>
+                        </a>
+                        <a href="https://wa.me/6281212345678" class="hover:text-green-400 transition-colors">
+                            <i class="fab fa-whatsapp text-2xl"></i>
+                        </a>
+                        <a href="#" class="hover:text-red-400 transition-colors">
+                            <i class="fab fa-youtube text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr class="my-8 border-gray-700">
+
+            <!-- Copyright -->
+            <div class="text-center text-gray-400">
+                <p>&copy; 2026 The Ocean's Table Cafe. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" style="color: var(--primary-navy);">Checkout</h2>
+                <button id="closeCheckoutBtn" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                <h3 class="font-bold mb-4" style="color: var(--primary-navy);">Ringkasan Pesanan</h3>
+                <div id="orderSummary" class="text-sm space-y-2">
+                    <!-- Order items will be inserted here -->
+                </div>
+                <hr class="my-4">
+                <div class="flex justify-between font-bold text-lg">
+                    <span>Total:</span>
+                    <span id="totalPrice" style="color: var(--accent-coral);">Rp 0</span>
+                </div>
+            </div>
+
+            <!-- Customer Form -->
+            <form id="checkoutForm" class="space-y-4 mb-6">
+                <div>
+                    <label class="block font-semibold mb-2" style="color: var(--primary-navy);">Nama Lengkap</label>
+                    <input type="text" id="customerName" required placeholder="Masukkan nama Anda" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-2" style="color: var(--primary-navy);">Alamat Pengiriman</label>
+                    <textarea id="customerAddress" required placeholder="Masukkan alamat lengkap Anda" rows="3" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+            </form>
+
+            <!-- Payment Methods -->
+            <div class="mb-6">
+                <h3 class="font-bold mb-4" style="color: var(--primary-navy);">Metode Pembayaran</h3>
+                <div class="space-y-4">
+                    <!-- Bank Transfer -->
+                    <div class="border-2 border-gray-300 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors" id="bankTransfer">
+                        <div class="flex items-center gap-3 mb-3">
+                            <input type="radio" name="payment" value="bank" checked>
+                            <label class="font-semibold cursor-pointer">Transfer Bank</label>
+                        </div>
+                        <div id="bankDetails" class="bg-gray-50 p-3 rounded text-sm hidden">
+                            <p><strong>Bank BCA</strong></p>
+                            <p>No. Rekening: 1234567890</p>
+                            <p>Atas Nama: The Ocean's Table</p>
+                        </div>
+                    </div>
+
+                    <!-- QRIS -->
+                    <div class="border-2 border-gray-300 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors" id="qrisOption">
+                        <div class="flex items-center gap-3 mb-3">
+                            <input type="radio" name="payment" value="qris">
+                            <label class="font-semibold cursor-pointer">QRIS</label>
+                        </div>
+                        <div id="qrisImage" class="bg-gray-50 p-3 rounded text-center hidden">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23000080' width='200' height='200'/%3E%3Crect fill='%23fff' x='10' y='10' width='180' height='180'/%3E%3Crect fill='%23000080' x='20' y='20' width='50' height='50'/%3E%3Crect fill='%23000080' x='130' y='20' width='50' height='50'/%3E%3Crect fill='%23000080' x='20' y='130' width='50' height='50'/%3E%3Ctext x='100' y='110' font-size='14' text-anchor='middle' fill='%23000080'%3EQRIS%3C/text%3E%3C/svg%3E" alt="QR Code" class="w-32 h-32 mx-auto">
+                            <p class="text-sm text-gray-600 mt-2">Scan dengan aplikasi e-wallet Anda</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-4">
+                <button id="cancelCheckoutBtn" class="flex-1 px-4 py-2 border-2" style="border-color: var(--primary-navy); color: var(--primary-navy);">
+                    Batal
+                </button>
+                <button id="whatsappBtn" class="flex-1 btn-primary px-4 py-2 text-white rounded-lg font-bold">
+                    Pesan via WhatsApp
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sticky Cart Summary Bar -->
+    <div class="sticky-footer hidden" id="stickySummary">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div>
+                <span id="cartItemCount">0</span> item dalam keranjang
+            </div>
+            <div class="flex items-center gap-8">
+                <div class="text-lg font-bold">
+                    Total: <span id="cartTotal" style="color: var(--accent-coral);">Rp 0</span>
+                </div>
+                <button id="checkoutBtn" class="btn-primary px-6 py-2 text-white rounded-lg font-bold">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SeaBites | Menu Laut & Pesan</title>
+  <style>
+    :root {
+      --ocean: #046b99;
+      --sky: #8ed0f4;
+      --sand: #f9ddc5;
+      --wave: #3aa8c1;
+      --text: #0a2540;
+      --card: rgba(255,255,255,0.92);
+      --accent: #f9a826;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #edf7ff 0%, #b8e5ff 45%, #67c3e8 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      padding: 2rem 1rem 1rem;
+      background: linear-gradient(180deg, rgba(4,107,153,0.95), rgba(16,122,168,0.82));
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: "";
+      position: absolute;
+      width: 120%;
+      height: 140px;
+      left: -10%;
+      bottom: -20px;
+      background: radial-gradient(circle, rgba(255,255,255,0.22), transparent 70%);
+      border-radius: 50%;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      letter-spacing: 0.06em;
+    }
+    header p {
+      max-width: 760px;
+      margin: 1rem auto 0;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+    .intro {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+      margin-bottom: 2rem;
+    }
+    .card-soft {
+      background: var(--card);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(6, 35, 63, 0.12);
+      padding: 1.6rem;
+    }
+    .card-soft h2 { margin-top: 0; }
+    .menu-section {
+      margin-top: 1.5rem;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .section-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .grid-menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .menu-card {
+      background: rgba(255,255,255,0.92);
+      border-radius: 20px;
+      padding: 1rem;
+      border: 1px solid rgba(9, 71, 109, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .menu-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+    .menu-card .type {
+      font-size: 0.9rem;
+      margin-bottom: 0.6rem;
+      color: #196d8f;
+    }
+    .menu-card .price {
+      font-weight: 700;
+      color: var(--ocean);
+      margin-bottom: 0.8rem;
+    }
+    .menu-card small {
+      display: block;
+      margin-bottom: 0.8rem;
+      color: #4f6e86;
+    }
+    .menu-card input {
+      width: 100%;
+      padding: 0.65rem 0.8rem;
+      border-radius: 14px;
+      border: 1px solid rgba(9,71,109,0.15);
+      margin-bottom: 0.8rem;
+      font-size: 0.95rem;
+    }
+    .menu-card button {
+      border: none;
+      border-radius: 14px;
+      padding: 0.9rem 1rem;
+      background: linear-gradient(135deg, #0284c7, #0ab0f4);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .menu-card button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(4,107,153,0.22);
+    }
+    .cart-panel {
+      display: grid;
+      gap: 1rem;
+    }
+    .cart-panel ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .cart-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.75rem;
+      padding: 0.9rem 1rem;
+      border-radius: 18px;
+      border: 1px solid rgba(9,71,109,0.12);
+      background: #f5fbff;
+      align-items: center;
+    }
+    .cart-item strong { display: block; margin-bottom: 0.25rem; }
+    .cart-item span { color: #25607f; }
+    .cart-summary {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 1.4rem;
+      border: 1px solid rgba(9,71,109,0.08);
+    }
+    .cart-summary div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.9rem;
+      gap: 1rem;
+    }
+    .cart-summary div strong { color: var(--ocean); }
+    .payment-area {
+      display: grid;
+      gap: 1rem;
+    }
+    .payment-area label {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(9,71,109,0.18);
+      border-radius: 18px;
+      background: white;
+      cursor: pointer;
+    }
+    .payment-area input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #0b76a2;
+      margin: 0;
+    }
+    .payment-instructions {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid rgba(9,71,109,0.12);
+      padding: 1rem;
+      line-height: 1.6;
+    }
+    .payment-instructions h3 {
+      margin-top: 0;
+    }
+    .payment-instructions img {
+      width: 180px;
+      max-width: 100%;
+      display: block;
+      margin: 1rem 0;
+      border-radius: 16px;
+      border: 1px solid rgba(9,71,109,0.12);
+    }
+    footer {
+      margin-top: 2rem;
+      padding: 1.5rem 1rem 2rem;
+      text-align: center;
+      color: #083049;
+    }
+    footer p {
+      margin: 0.4rem 0;
+      font-size: 0.98rem;
+    }
+    .highlight {
+      background: rgba(249,168,38,0.12);
+      padding: 0.15rem 0.4rem;
+      border-radius: 999px;
+      color: #b35a00;
+    }
+    @media (max-width: 860px) {
+      .intro { grid-template-columns: 1fr; }
+      .section-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SeaBites</h1>
+    <p>Selamat datang di SeaBites, pengalaman kuliner laut bergaya VBES dengan 56 menu makanan & minuman. Pilih, pesan, dan bayar dengan Manual atau QRIS untuk kenyamanan cepat.</p>
+  </header>
+  <main>
+    <section class="intro">
+      <div class="card-soft">
+        <h2>Pesan sekarang, nikmati suasana laut</h2>
+        <p>Gunakan daftar menu di bawah untuk menambahkan pesanan. Setiap item dapat diatur jumlahnya, lalu lihat ringkasan belanja dengan total harga. Pilih metode pembayaran manual atau QRIS setelah selesai.</p>
+        <ul>
+          <li><strong>Alamat</strong>: Jl. Pantai Indah No. 8, Desa Laut, Kota Biru</li>
+          <li><strong>Admin</strong>: +62 812-3456-7890</li>
+          <li><strong>Telepon</strong>: +62 811-2223-456</li>
+        </ul>
+      </div>
+      <aside class="card-soft cart-panel">
+        <h2>Keranjang Pesanan</h2>
+        <ul id="cartList">
+          <li>Belum ada pesanan. Tambahkan menu untuk melihat ringkasan.</li>
+        </ul>
+        <div class="cart-summary">
+          <div><span>Jumlah item</span><strong id="cartCount">0</strong></div>
+          <div><span>Total harga</span><strong id="cartTotal">Rp 0</strong></div>
+          <div><span>Metode pembayaran</span><strong id="paymentMode">Manual</strong></div>
+        </div>
+        <div class="payment-area">
+          <label><input type="radio" name="payment" value="manual" checked /> Bayar Manual</label>
+          <label><input type="radio" name="payment" value="qris" /> Bayar QRIS</label>
+        </div>
+        <div class="payment-instructions" id="paymentInstructions">
+          <h3>Pembayaran Manual</h3>
+          <p>Silakan transfer ke rekening SeaBites, lalu kirim bukti pembayaran ke admin WhatsApp di <strong>+62 812-3456-7890</strong>.</p>
+          <p>Rekening: <strong>123-456-7890</strong> a/n SeaBites</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="menu-section">
+      <div class="section-header">
+        <h2>Menu Makanan & Minuman (66 item)</h2>
+        <p class="highlight">Bergaya laut, segar, dan lengkap untuk santap santai.</p>
+      </div>
+      <div class="grid-menu" id="menuGrid"></div>
+    </section>
+  </main>
+  <footer>
+    <p>SeaBites - Restoran Laut Bergaya VBES</p>
+    <p>Alamat: Jl. Pantai Indah No. 8, Desa Laut, Kota Biru</p>
+    <p>Admin: +62 812-3456-7890 | Telepon: +62 811-2223-456</p>
+  </footer>
+
+  <script>
+    const menuItems = [
+      { id: 1, nama: 'Nasi Goreng Seafood', jenis: 'Makanan', harga: 38000, deskripsi: 'Nasi goreng dengan udang, cumi, dan sayuran segar.' },
+      { id: 2, nama: 'Sop Ikan Kakap', jenis: 'Makanan', harga: 45000, deskripsi: 'Kuah bening aroma rempah dengan potong ikan kakap.' },
+      { id: 3, nama: 'Ayam Bakar Madu', jenis: 'Makanan', harga: 36000, deskripsi: 'Ayam bakar manis dengan bumbu khas laut.' },
+      { id: 4, nama: 'Kepiting Saus Padang', jenis: 'Makanan', harga: 89000, deskripsi: 'Kepiting besar dimasak dengan saus pedas.' },
+      { id: 5, nama: 'Tumis Kerang Hijau', jenis: 'Makanan', harga: 32000, deskripsi: 'Kerang hijau tumis bawang putih pedas.' },
+      { id: 6, nama: 'Udang Goreng Tepung', jenis: 'Makanan', harga: 42000, deskripsi: 'Udang renyah dengan saus sambal special.' },
+      { id: 7, nama: 'Pasta Seafood Lemon', jenis: 'Makanan', harga: 47000, deskripsi: 'Pasta creamy dengan seafood segar dan lemon.' },
+      { id: 8, nama: 'Ikan Bakar Jimbaran', jenis: 'Makanan', harga: 52000, deskripsi: 'Ikan bakar bumbu Bali dengan sambal matah.' },
+      { id: 9, nama: 'Cumi Saus Tiram', jenis: 'Makanan', harga: 41000, deskripsi: 'Cumi lembut dalam saus tiram gurih.' },
+      { id: 10, nama: 'Gurame Saus Asam Manis', jenis: 'Makanan', harga: 56000, deskripsi: 'Gurame renyah dengan saus asam manis.' },
+      { id: 11, nama: 'Nasi Campur Laut', jenis: 'Makanan', harga: 47000, deskripsi: 'Nasi dengan variasi lauk laut dan telur.' },
+      { id: 12, nama: 'Sate Udang Pedas', jenis: 'Makanan', harga: 39000, deskripsi: 'Sate udang dengan bumbu kacang pedas.' },
+      { id: 13, nama: 'Salad Rumput Laut', jenis: 'Makanan', harga: 29000, deskripsi: 'Salad segar dengan rumput laut dan saus jeruk.' },
+      { id: 14, nama: 'Tahu Crispy Saus Kailan', jenis: 'Makanan', harga: 28000, deskripsi: 'Tahu krispi dengan sayur kailan.' },
+      { id: 15, nama: 'Nasi Uduk Seafood', jenis: 'Makanan', harga: 45000, deskripsi: 'Nasi uduk harum dilengkapi seafood.' },
+      { id: 16, nama: 'Kakap Goreng Kremes', jenis: 'Makanan', harga: 54000, deskripsi: 'Ikan kakap goreng dengan kremes renyah.' },
+      { id: 17, nama: 'Bihun Bebek Laut', jenis: 'Makanan', harga: 41000, deskripsi: 'Bihun dengan daging bebek dan sayuran.' },
+      { id: 18, nama: 'Sup Kepiting Jahe', jenis: 'Makanan', harga: 48000, deskripsi: 'Sup hangat dengan rasa jahe segar.' },
+      { id: 19, nama: 'Tongseng Ikan Tuna', jenis: 'Makanan', harga: 43000, deskripsi: 'Tongseng ikan tuna bercita rasa gurih.' },
+      { id: 20, nama: 'Pecel Lele Laut', jenis: 'Makanan', harga: 26000, deskripsi: 'Lele goreng disajikan dengan sambal pecel.' },
+      { id: 21, nama: 'Sushi Roll Laut', jenis: 'Makanan', harga: 52000, deskripsi: 'Sushi roll isi ikan segar dan sayuran.' },
+      { id: 22, nama: 'Burger Ikan', jenis: 'Makanan', harga: 44000, deskripsi: 'Burger dengan patty ikan dan saus tartar.' },
+      { id: 23, nama: 'Mie Goreng Seafood', jenis: 'Makanan', harga: 36000, deskripsi: 'Mie goreng campur seafood lezat.' },
+      { id: 24, nama: 'Nasi Goreng Pete Laut', jenis: 'Makanan', harga: 38000, deskripsi: 'Nasi goreng dengan pete dan seafood.' },
+      { id: 25, nama: 'Salmon Teriyaki', jenis: 'Makanan', harga: 68000, deskripsi: 'Salmon panggang dengan saus teriyaki.' },
+      { id: 26, nama: 'Cumi Bakar Madu', jenis: 'Makanan', harga: 47000, deskripsi: 'Cumi bakar dengan lapisan madu manis.' },
+      { id: 27, nama: 'Kakap Asam Pedas', jenis: 'Makanan', harga: 54000, deskripsi: 'Ikan kakap dengan saus asam pedas kaya rempah.' },
+      { id: 28, nama: 'Ayam Geprek Laut', jenis: 'Makanan', harga: 34000, deskripsi: 'Ayam geprek dengan sambal rumput laut.' },
+      { id: 29, nama: 'Es Teh Kelapa', jenis: 'Minuman', harga: 18000, deskripsi: 'Teh segar dengan sentuhan sari kelapa.' },
+      { id: 30, nama: 'Lemonade Laut', jenis: 'Minuman', harga: 19000, deskripsi: 'Lemonade dingin dengan daun mint.' },
+      { id: 31, nama: 'Es Kopi Susu', jenis: 'Minuman', harga: 22000, deskripsi: 'Kopi susu dingin yang creamy.' },
+      { id: 32, nama: 'Jus Mangga Tropis', jenis: 'Minuman', harga: 24000, deskripsi: 'Jus mangga segar penuh vitamin.' },
+      { id: 33, nama: 'Teh Tarik Dingin', jenis: 'Minuman', harga: 20000, deskripsi: 'Teh tarik manis dan lembut.' },
+      { id: 34, nama: 'Cappuccino Laut', jenis: 'Minuman', harga: 26000, deskripsi: 'Kopi cappuccino dengan buih lembut.' },
+      { id: 35, nama: 'Jus Jeruk Segar', jenis: 'Minuman', harga: 21000, deskripsi: 'Jus jeruk asli tanpa pemanis berlebihan.' },
+      { id: 36, nama: 'Es Cincau Sea', jenis: 'Minuman', harga: 19000, deskripsi: 'Minuman manis dengan cincau hitam.' },
+      { id: 37, nama: 'Smoothie Stroberi', jenis: 'Minuman', harga: 25000, deskripsi: 'Smoothie kental dari stroberi segar.' },
+      { id: 38, nama: 'Es Kelapa Muda', jenis: 'Minuman', harga: 24000, deskripsi: 'Kelapa muda alami dengan daging segar.' },
+      { id: 39, nama: 'Mojito Non-Alkohol', jenis: 'Minuman', harga: 23000, deskripsi: 'Minuman mint dan lime menyegarkan.' },
+      { id: 40, nama: 'Frozen Blue Ocean', jenis: 'Minuman', harga: 27000, deskripsi: 'Mocktail biru cerah dengan rasa tropis.' },
+      { id: 41, nama: 'Jus Apel Serai', jenis: 'Minuman', harga: 22000, deskripsi: 'Jus apel segar dengan aroma serai.' },
+      { id: 42, nama: 'Soda Lime Splash', jenis: 'Minuman', harga: 20000, deskripsi: 'Soda lemon lime bergelembung.' },
+      { id: 43, nama: 'Teh Herbal Laut', jenis: 'Minuman', harga: 19000, deskripsi: 'Teh herbal dengan aroma laut dan jahe.' },
+      { id: 44, nama: 'Hot Chocolate Sea', jenis: 'Minuman', harga: 24000, deskripsi: 'Cokelat panas creamy dengan marshmallow.' },
+      { id: 45, nama: 'Jus Nanas Mint', jenis: 'Minuman', harga: 23000, deskripsi: 'Perpaduan nanas manis dengan mint.' },
+      { id: 46, nama: 'Es Cokelat Kelapa', jenis: 'Minuman', harga: 25000, deskripsi: 'Cokelat dingin dengan parutan kelapa.' },
+      { id: 47, nama: 'Jus Semangka', jenis: 'Minuman', harga: 21000, deskripsi: 'Jus semangka segar dan menyegarkan.' },
+      { id: 48, nama: 'Lassi Vanilla', jenis: 'Minuman', harga: 24000, deskripsi: 'Yoghurt shake vanilla lembut.' },
+      { id: 49, nama: 'Air Mineral', jenis: 'Minuman', harga: 12000, deskripsi: 'Air mineral dingin siap minum.' },
+      { id: 50, nama: 'Es Kopi Ocean', jenis: 'Minuman', harga: 26000, deskripsi: 'Kopi dingin dengan sedikit sirup vanilla.' },
+      { id: 51, nama: 'Ayran Laut', jenis: 'Minuman', harga: 21000, deskripsi: 'Minuman yoghurt asin ala Timur Tengah.' },
+      { id: 52, nama: 'Jus Kiwi Hijau', jenis: 'Minuman', harga: 23000, deskripsi: 'Jus kiwi segar dengan sentuhan mint.' },
+      { id: 53, nama: 'Teh Lemon Sea', jenis: 'Minuman', harga: 20000, deskripsi: 'Teh dingin dengan potongan lemon.' },
+      { id: 54, nama: 'Jus Wortel Jeruk', jenis: 'Minuman', harga: 23000, deskripsi: 'Jus sehat dari wortel dan jeruk.' },
+      { id: 55, nama: 'Milkshake Vanilla', jenis: 'Minuman', harga: 28000, deskripsi: 'Milkshake kental dengan es krim vanilla.' },
+      { id: 56, nama: 'Es Teh Boba', jenis: 'Minuman', harga: 30000, deskripsi: 'Es teh manis dengan boba kenyal.' },
+      { id: 57, nama: 'Roti Bakar Kerang', jenis: 'Makanan', harga: 32000, deskripsi: 'Roti panggang dengan isian daging kerang dan saus mayo laut.' },
+      { id: 58, nama: 'Nasi Liwet Bahari', jenis: 'Makanan', harga: 45000, deskripsi: 'Nasi liwet wangi disajikan dengan ikan teri, jamur laut, dan sambal.' },
+      { id: 59, nama: 'Bakso Seafood Gurih', jenis: 'Makanan', harga: 35000, deskripsi: 'Bakso kenyal dengan taburan udang dan kuah kaldu ikan.' },
+      { id: 60, nama: 'Kroket Tuna Keju', jenis: 'Makanan', harga: 33000, deskripsi: 'Kroket renyah isi tuna panggang dan keju melting.' },
+      { id: 61, nama: 'Tumis Salsa Rumput Laut', jenis: 'Makanan', harga: 30000, deskripsi: 'Sayur tumis dengan salsa rumput laut dan bumbu khas pantai.' },
+      { id: 62, nama: 'Mie Kuah Kerang', jenis: 'Makanan', harga: 40000, deskripsi: 'Mie kuah bening dengan kerang segar dan daun bawang.' },
+      { id: 63, nama: 'Pizza Aloha Seafood', jenis: 'Makanan', harga: 62000, deskripsi: 'Pizza tipis dengan topping seafood asin dan nanas segar.' },
+      { id: 64, nama: 'Es Krim Bahari', jenis: 'Minuman', harga: 32000, deskripsi: 'Es krim rasa kelapa dan vanila dengan taburan gula permen laut.' },
+      { id: 65, nama: 'Mocktail Ombak Biru', jenis: 'Minuman', harga: 28000, deskripsi: 'Minuman biru tropis dengan soda dan sirup buah.' },
+      { id: 66, nama: 'Teh Selasih Laut', jenis: 'Minuman', harga: 21000, deskripsi: 'Teh manis dingin dengan selasih dan sedikit vanila.' }
+    ];
+
+    const cart = [];
+    const menuGrid = document.getElementById('menuGrid');
+    const cartList = document.getElementById('cartList');
+    const cartCount = document.getElementById('cartCount');
+    const cartTotal = document.getElementById('cartTotal');
+    const paymentMode = document.getElementById('paymentMode');
+    const paymentInstructions = document.getElementById('paymentInstructions');
+
+    function formatPrice(value) {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
+    }
+
+    function renderMenu() {
+      menuGrid.innerHTML = menuItems.map(item => `
+        <article class="menu-card">
+          <div>
+            <h3>${item.nama}</h3>
+            <div class="type">${item.jenis}</div>
+            <div class="price">${formatPrice(item.harga)}</div>
+            <small>${item.deskripsi}</small>
+          </div>
+          <div>
+            <input type="number" min="0" value="0" id="qty-${item.id}" aria-label="Jumlah ${item.nama}" />
+            <button data-id="${item.id}">Tambah ke Keranjang</button>
+          </div>
+        </article>
+      `).join('');
+
+      document.querySelectorAll('.menu-card button').forEach(button => {
+        button.addEventListener('click', () => {
+          const id = Number(button.dataset.id);
+          const qtyInput = document.getElementById(`qty-${id}`);
+          const quantity = Math.max(0, Number(qtyInput.value));
+          if (quantity > 0) addToCart(id, quantity);
+        });
+      });
+    }
+
+    function addToCart(id, quantity) {
+      const item = menuItems.find(product => product.id === id);
+      if (!item) return;
+      const existing = cart.find(line => line.id === id);
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        cart.push({ ...item, quantity });
+      }
+      updateCart();
+      const qtyInput = document.getElementById(`qty-${id}`);
+      qtyInput.value = '0';
+    }
+
+    function updateCart() {
+      if (cart.length === 0) {
+        cartList.innerHTML = '<li>Belum ada pesanan. Tambahkan menu untuk melihat ringkasan.</li>';
+      } else {
+        cartList.innerHTML = cart.map(item => `
+          <li class="cart-item">
+            <div>
+              <strong>${item.nama} x${item.quantity}</strong>
+              <span>${item.jenis} • ${formatPrice(item.harga)} / pcs</span>
+            </div>
+            <div>${formatPrice(item.harga * item.quantity)}</div>
+          </li>
+        `).join('');
+      }
+
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const totalPrice = cart.reduce((sum, item) => sum + item.harga * item.quantity, 0);
+      cartCount.textContent = totalItems;
+      cartTotal.textContent = formatPrice(totalPrice);
+    }
+
+    function updatePaymentInstructions(mode) {
+      paymentMode.textContent = mode === 'qris' ? 'QRIS' : 'Manual';
+      if (mode === 'qris') {
+        paymentInstructions.innerHTML = `
+          <h3>Pembayaran QRIS</h3>
+          <p>Scan QRIS berikut dengan aplikasi pembayaran Anda untuk menyelesaikan pesanan.</p>
+          <img src="https://via.placeholder.com/180x180.png?text=QRIS+SeaBites" alt="QRIS SeaBites" />
+          <p>Nomor pembayaran QRIS: <strong>SEA-QR-123456</strong></p>
+          <p>Setelah transfer, kirimkan bukti pembayaran ke WhatsApp admin: <strong>+62 812-3456-7890</strong></p>
+        `;
+      } else {
+        paymentInstructions.innerHTML = `
+          <h3>Pembayaran Manual</h3>
+          <p>Silakan transfer ke rekening SeaBites, lalu kirim bukti pembayaran ke admin WhatsApp di <strong>+62 812-3456-7890</strong>.</p>
+          <p>Rekening: <strong>123-456-7890</strong> a/n SeaBites</p>
+        `;
+      }
+    }
+
+    document.querySelectorAll('input[name="payment"]').forEach(radio => {
+      radio.addEventListener('change', event => {
+        updatePaymentInstructions(event.target.value);
+      });
+    });
+
+    renderMenu();
+    updateCart();
+    updatePaymentInstructions('manual');
+  </script>
+</body>
+</html>

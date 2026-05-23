@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe Jatinangka - Tempat Nongkrong Hits</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .hero-bg { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-orange-600">Cafe Jatinangka</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#menu" class="hover:text-orange-500">Menu</a>
+                <a href="#testimoni" class="hover:text-orange-500">Testimoni</a>
+                <a href="#lokasi" class="hover:text-orange-500">Lokasi</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-bg h-[60vh] flex items-center justify-center text-center text-white">
+        <div class="px-4">
+            <h2 class="text-4xl md:text-6xl font-bold mb-4">Nongkrong Asik, Harga Murah!</h2>
+            <p class="text-lg mb-8">Tempat favorit anak sekolah di Kayen Kidul.</p>
+            <a href="https://wa.me/628123456789" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-full font-semibold transition">Pesan via WhatsApp</a>
+        </div>
+    </header>
+
+    <section id="menu" class="py-16 container mx-auto px-6">
+        <h3 class="text-3xl font-bold text-center mb-12">Menu Favorit (Ramah Kantong)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-4 rounded-xl shadow-lg border-b-4 border-orange-500">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80" class="rounded-lg mb-4 h-48 w-full object-cover">
+                <h4 class="font-bold text-xl">Roti Bakar Coklat Keju</h4>
+                <p class="text-gray-600 mb-2">Lumer di mulut, pas di perut.</p>
+                <span class="text-orange-600 font-bold text-lg">Rp 10.000</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-lg border-b-4 border-orange-500">
+                <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=500&q=80" class="rounded-lg mb-4 h-48 w-full object-cover">
+                <h4 class="font-bold text-xl">Es Kopi Susu Jatinangka</h4>
+                <p class="text-gray-600 mb-2">Bikin semangat nugas!</p>
+                <span class="text-orange-600 font-bold text-lg">Rp 8.000</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-lg border-b-4 border-orange-500">
+                <img src="https://images.unsplash.com/photo-1512152272829-e3139592d56f?w=500&q=80" class="rounded-lg mb-4 h-48 w-full object-cover">
+                <h4 class="font-bold text-xl">Kentang Goreng Krispi</h4>
+                <p class="text-gray-600 mb-2">Cemilan wajib pas mabar.</p>
+                <span class="text-orange-600 font-bold text-lg">Rp 7.000</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimoni" class="bg-orange-50 py-16">
+        <div class="container mx-auto px-6">
+            <h3 class="text-3xl font-bold text-center mb-12">Apa Kata Mereka?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <blockquote class="bg-white p-6 rounded-lg shadow italic border-l-4 border-orange-500">
+                    "Tempatnya enak banget buat nugas, wifi kenceng dan harga es kopinya nggak bikin kantong kering!"
+                    <cite class="block mt-4 font-bold text-gray-800 NOT-italic">- Budi, Siswa SMA</cite>
+                </blockquote>
+                <blockquote class="bg-white p-6 rounded-lg shadow italic border-l-4 border-orange-500">
+                    "Kentang gorengnya paling juara. Sering kesini bareng temen-temen sekelas."
+                    <cite class="block mt-4 font-bold text-gray-800 NOT-italic">- Sinta, Pelajar</cite>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <section id="lokasi" class="py-16 container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h3 class="text-3xl font-bold mb-6">Kunjungi Kami</h3>
+                <p class="text-lg mb-4 text-gray-600">
+                    <strong>Alamat:</strong><br>
+                    RT.01 RW.01, Ringin Sari, Padangan,<br>
+                    Kec. Kayen Kidul, Kabupaten Kediri,<br>
+                    Jawa Timur 64183
+                </p>
+                <p class="text-orange-600 font-bold">Buka Setiap Hari: 10.00 - 22.00 WIB</p>
+            </div>
+            <div class="rounded-xl overflow-hidden shadow-2xl h-80">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15809.56247953258!2d112.0805177!3d-7.748366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e785006b515d07b%3A0x4027a70e3562640!2sKayen%20Kidul%2C%20Kediri%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-8 text-center">
+        <p>&copy; 2026 Cafe Jatinangka Kediri. All Rights Reserved.</p>
+        <div class="mt-4">
+            <a href="https://wa.me/628123456789" class="text-orange-400 hover:underline">Hubungi Admin: 0812-3456-789</a>
+        </div>
+    </footer>
+
+</body>
+</html>
